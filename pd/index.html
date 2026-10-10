@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Score Predictor — Linear Regression AI</title>
+  <meta name="description" content="Predict student final exam marks using a trained Linear Regression model with Study Hours, Attendance, and Assignment scores as inputs." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- ─── Header ─── -->
+    <header class="header">
+      <div class="header-badge">
+        <div class="dot"></div>
+        Linear Regression · sklearn · R² = 0.9988
+      </div>
+      <h1>Student Score Predictor</h1>
+      <p>Enter study hours, attendance, and assignment marks — the trained ML model predicts your final exam score instantly.</p>
+    </header>
+
+    <!-- ─── Main Grid ─── -->
+    <main class="main-grid">
+
+      <!-- ── Card 1: Input Panel ── -->
+      <div class="card delay-1" id="input-card">
+        <div class="card-header">
+          <div class="card-icon icon-cyan">🎯</div>
+          <div>
+            <div class="card-title">Input Parameters</div>
+            <div class="card-subtitle">Adjust sliders or type values directly</div>
+          </div>
+        </div>
+
+        <!-- Study Hours -->
+        <div class="input-group">
+          <div class="input-label">
+            <span>Study Hours</span>
+            <span class="input-value-badge" id="badge-hours">4 hrs</span>
+          </div>
+          <div class="slider-wrapper">
+            <input
+              type="range"
+              id="slider-hours"
+              class="custom-range"
+              min="0" max="12" step="0.5" value="4"
+              aria-label="Study hours"
+            />
+          </div>
+          <div class="number-input-wrapper">
+            <button class="btn-spin" data-key="studyHours" data-dir="-1" aria-label="Decrease study hours">−</button>
+            <input type="number" id="num-hours" min="0" max="12" step="0.5" value="4" aria-label="Study hours value" />
+            <button class="btn-spin" data-key="studyHours" data-dir="1" aria-label="Increase study hours">+</button>
+          </div>
+        </div>
+
+        <!-- Attendance -->
+        <div class="input-group">
+          <div class="input-label">
+            <span>Attendance %</span>
+            <span class="input-value-badge" id="badge-attendance">75%</span>
+          </div>
+          <div class="slider-wrapper">
+            <input
+              type="range"
+              id="slider-attendance"
+              class="custom-range"
+              min="0" max="100" step="1" value="75"
+              aria-label="Attendance percentage"
+            />
+          </div>
+          <div class="number-input-wrapper">
+            <button class="btn-spin" data-key="attendance" data-dir="-1" aria-label="Decrease attendance">−</button>
+            <input type="number" id="num-attendance" min="0" max="100" step="1" value="75" aria-label="Attendance value" />
+            <button class="btn-spin" data-key="attendance" data-dir="1" aria-label="Increase attendance">+</button>
+          </div>
+        </div>
+
+        <!-- Assignments -->
+        <div class="input-group">
+          <div class="input-label">
+            <span>Assignment Score</span>
+            <span class="input-value-badge" id="badge-assignments">68 pts</span>
+          </div>
+          <div class="slider-wrapper">
+            <input
+              type="range"
+              id="slider-assignments"
+              class="custom-range"
+              min="0" max="100" step="1" value="68"
+              aria-label="Assignment score"
+            />
+          </div>
+          <div class="number-input-wrapper">
+            <button class="btn-spin" data-key="assignments" data-dir="-1" aria-label="Decrease assignment score">−</button>
+            <input type="number" id="num-assignments" min="0" max="100" step="1" value="68" aria-label="Assignment score value" />
+            <button class="btn-spin" data-key="assignments" data-dir="1" aria-label="Increase assignment score">+</button>
+          </div>
+        </div>
+
+        <!-- Predict Button -->
+        <button class="btn-predict" id="btn-predict" aria-label="Run prediction">
+          <span class="btn-text">✦ Predict Final Marks</span>
+          <span class="btn-loader"><div class="spinner"></div></span>
+        </button>
+      </div>
+
+      <!-- ── Card 2: Result Panel ── -->
+      <div class="card delay-2" id="result-card">
+        <div class="card-header">
+          <div class="card-icon icon-violet">📊</div>
+          <div>
+            <div class="card-title">Prediction Result</div>
+            <div class="card-subtitle">Real-time ML inference output</div>
+          </div>
+        </div>
+
+        <div class="result-section">
+          <!-- Circular ring -->
+          <div class="result-ring" aria-label="Score ring chart">
+            <svg viewBox="0 0 200 200" width="200" height="200">
+              <defs>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop id="ring-grad-start" offset="0%"   stop-color="#00f5ff"/>
+                  <stop id="ring-grad-end"   offset="100%" stop-color="#a259ff"/>
+                </linearGradient>
+              </defs>
+              <circle class="ring-bg"       cx="100" cy="100" r="85"/>
+              <circle class="ring-progress" cx="100" cy="100" r="85"
+                id="ring-progress"
+                style="stroke-dasharray: 534; stroke-dashoffset: 534;"
+              />
+            </svg>
+            <div class="result-center">
+              <div class="result-score" id="result-score">—</div>
+              <div class="result-label">/ 100</div>
+            </div>
+          </div>
+
+          <span class="result-grade" id="result-grade">—</span>
+          <p class="result-message" id="result-message">Click "Predict" to see your result.</p>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="stats-row">
+          <div class="stat-item tooltip-wrapper">
+            <div class="stat-value">R² 99.9%</div>
+            <div class="stat-label">Accuracy</div>
+            <div class="tooltip-tip">Model explains 99.88% variance in marks</div>
+          </div>
+          <div class="stat-item tooltip-wrapper">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Samples</div>
+            <div class="tooltip-tip">Training dataset size</div>
+          </div>
+          <div class="stat-item tooltip-wrapper">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Features</div>
+            <div class="tooltip-tip">Hours · Attendance · Assignments</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 3: Model Info ── -->
+      <div class="card delay-3">
+        <div class="card-header">
+          <div class="card-icon icon-pink">🧠</div>
+          <div>
+            <div class="card-title">Model Equation</div>
+            <div class="card-subtitle">sklearn LinearRegression coefficients</div>
+          </div>
+        </div>
+
+        <div class="equation-box">
+          <span class="eq-highlight">FinalMarks</span> =
+          <span class="eq-coef">1.604</span> × <span class="eq-var">StudyHours</span><br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+
+          <span class="eq-coef">(&minus;0.063)</span> × <span class="eq-var">Attendance</span><br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+
+          <span class="eq-coef">0.858</span> × <span class="eq-var">Assignments</span><br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+
+          <span class="eq-coef">10.595</span>
+        </div>
+
+        <div class="coef-bars">
+          <div class="coef-row">
+            <div class="coef-row-header">
+              <span class="coef-name">Study Hours</span>
+              <span class="coef-value">+1.604</span>
+            </div>
+            <div class="coef-bar-track">
+              <div class="coef-bar-fill bar-cyan" style="width: 90%;"></div>
+            </div>
+          </div>
+          <div class="coef-row">
+            <div class="coef-row-header">
+              <span class="coef-name">Assignments</span>
+              <span class="coef-value">+0.858</span>
+            </div>
+            <div class="coef-bar-track">
+              <div class="coef-bar-fill bar-violet" style="width: 54%;"></div>
+            </div>
+          </div>
+          <div class="coef-row">
+            <div class="coef-row-header">
+              <span class="coef-name">Attendance</span>
+              <span class="coef-value">&minus;0.063</span>
+            </div>
+            <div class="coef-bar-track">
+              <div class="coef-bar-fill bar-pink" style="width: 10%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accuracy-display">
+          <div class="accuracy-icon">✅</div>
+          <div>
+            <div class="accuracy-label">Model Accuracy (R²)</div>
+            <div class="accuracy-value">99.88%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 4: Dataset ── -->
+      <div class="card delay-4">
+        <div class="card-header">
+          <div class="card-icon icon-gold">📋</div>
+          <div>
+            <div class="card-title">Training Dataset</div>
+            <div class="card-subtitle">8 student records used to train the model</div>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table" role="table" aria-label="Training dataset">
+            <thead>
+              <tr>
+                <th>Hours</th>
+                <th>Attendance</th>
+                <th>Assignments</th>
+                <th>Final Marks</th>
+              </tr>
+            </thead>
+            <tbody id="dataset-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      Built with sklearn LinearRegression · R² = 0.9988 · Instant client-side inference
+    </footer>
+
+  </div><!-- end page-wrapper -->
+
+  <script src="script.js"></script>
+</body>
+</html>

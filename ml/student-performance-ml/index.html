@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Pass/Fail Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="background-elements">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <main class="container">
+    <section class="glass-card">
+      <header>
+        <h1>Student Success Predictor</h1>
+        <p class="subtitle">Enter the lifestyle metrics to forecast academic performance.</p>
+      </header>
+
+      <form id="predict-form" autocomplete="off">
+        <div class="form-grid">
+          <div class="input-group">
+            <label for="studytime">Study Time (1‑4)</label>
+            <input type="number" id="studytime" min="1" max="4" required placeholder="e.g. 3" />
+          </div>
+          
+          <div class="input-group">
+            <label for="failures">Past Failures (0‑3)</label>
+            <input type="number" id="failures" min="0" max="3" required placeholder="e.g. 0" />
+          </div>
+          
+          <div class="input-group">
+            <label for="absences">Absences (0‑93)</label>
+            <input type="number" id="absences" min="0" max="93" required placeholder="e.g. 5" />
+          </div>
+          
+          <div class="input-group">
+            <label for="Medu">Mother's Edu (0‑4)</label>
+            <input type="number" id="Medu" min="0" max="4" required placeholder="e.g. 3" />
+          </div>
+          
+          <div class="input-group">
+            <label for="Fedu">Father's Edu (0‑4)</label>
+            <input type="number" id="Fedu" min="0" max="4" required placeholder="e.g. 3" />
+          </div>
+          
+          <div class="input-group">
+            <label for="goout">Going Out (1‑5)</label>
+            <input type="number" id="goout" min="1" max="5" required placeholder="e.g. 2" />
+          </div>
+          
+          <div class="input-group">
+            <label for="health">Health Status (1‑5)</label>
+            <input type="number" id="health" min="1" max="5" required placeholder="e.g. 5" />
+          </div>
+          
+          <div class="input-group">
+            <label for="Dalc">Workday Alcohol (1‑5)</label>
+            <input type="number" id="Dalc" min="1" max="5" required placeholder="e.g. 1" />
+          </div>
+          
+          <div class="input-group">
+            <label for="Walc">Weekend Alcohol (1‑5)</label>
+            <input type="number" id="Walc" min="1" max="5" required placeholder="e.g. 1" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-predict">
+          <span>Predict Outcome</span>
+          <div class="loader hidden"></div>
+        </button>
+      </form>
+
+      <div id="result-container" class="result-box hidden">
+        <h2 id="prediction-text">Result</h2>
+        <p id="prediction-desc"></p>
+      </div>
+    </section>
+  </main>
+  
+  <script src="script.js"></script>
+</body>
+</html>
